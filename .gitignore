@@ -1,0 +1,6 @@
+#All log Files
+*.log
+bin
+obj
+.vs
+.vscode
