@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Application.Dto.Auth
 {
-    public class UserRegisterDto
+    public class UserLoginDto
     {
-        [MaxLength(11) , Required]
+        [Required , MaxLength(11)]
         public string PhoneNumber { get; set; }
-        [MaxLength(50) , Required]
-        public string UserName { get; set; }
-        [MaxLength(30) , Required]
+
+        [Required , MaxLength(30)]
         public string Password { get; set; }
+
     }
 }
