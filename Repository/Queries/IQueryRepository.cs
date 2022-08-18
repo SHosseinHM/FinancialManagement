@@ -4,9 +4,18 @@ namespace Repository.Queries
 {
     public interface IQueryRepository
     {
-        public Task<IEnumerable<TType>> QueryMany<TType>(string sql, object value)  where TType : class;
+        /// <summary>
+        /// Query for Get many Data as One Object and Returns IEnumrable<Object>
+        /// </summary>
+        public Task<IEnumerable<TType>> QueryMany<TType>(string sql, object value) where TType : class;
+        /// <summary>
+        /// Query , if Exist that Request , Returns True
+        /// </summary>
         public Task<bool> QueryExist<TType>(string sql, object value) where TType : class;
-        public Task<TType> QuerySingle<TType>(string sql , object value) where TType : class;
+        /// <summary>
+        /// Query , if Request Exist , Return an Single Object
+        /// </summary>
+        public Task<TType> QuerySingle<TType>(string sql, object value) where TType : class;
 
     }
 }

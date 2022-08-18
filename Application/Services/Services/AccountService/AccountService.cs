@@ -19,6 +19,7 @@ namespace Application.Services.Services.AccountService
             _commandRepository = commandRepository;
         }
 
+        // Create User
         public async Task<bool> CreateUser(UserRegisterDto userRegisterDto)
         {
             var user = new User
@@ -36,6 +37,7 @@ namespace Application.Services.Services.AccountService
             return false;
         }
 
+        //PhoneNumberExist
         public async Task<bool> PhoneNumberExist(string phoneNnumber)
         {
             var sql = "select PhoneNumber as PhoneNumber from Users where PhoneNumber=@PhoneNumber";
@@ -46,11 +48,10 @@ namespace Application.Services.Services.AccountService
             return await _queryRepository.QueryExist<User>(sql, value);
         }
 
+        //User Can Login
         public async Task<User> UserCanLogin(UserLoginDto userLoginDto)
         {
-            var sql = "select PhoneNumber as PhoneNumber " +
-                            "Username as Username" +
-                            "from Users where PhoneNumber=@PhoneNumber AND PasswordHash=@Password";
+            var sql = "select PhoneNumber as PhoneNumber, Username as Username from Users where PhoneNumber=@PhoneNumber AND PasswordHash=@Password";
             var values = new
             {
                 PhoneNumber = userLoginDto.PhoneNumber,

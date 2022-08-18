@@ -27,13 +27,12 @@ namespace Tests.FinancialManagment.Controllers
         public async Task Register_PhoneNumberAlreadyExist_ReturnsBadRequest()
         {
             _mediator = new Mock<IMediator>();
-            var token = new Mock<TokenService>();
             _mediator.Setup(p => p.Send(It.IsAny<AccountService.PhoneNumberExist>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
             var send = await _mediator.Object.Send(new AccountService.PhoneNumberExist());
 
-            _controller = new AuthController(_mediator.Object, token.Object);
+            _controller = new AuthController(_mediator.Object);
             var dto = new Mock<UserRegisterDto>();
             var result = await _controller.Register(dto.Object);
 
@@ -41,7 +40,7 @@ namespace Tests.FinancialManagment.Controllers
             Assert.NotNull(send);
             result.Should().BeOfType<BadRequestObjectResult>();
 
-        }
+        } 
 
 
 
@@ -49,13 +48,12 @@ namespace Tests.FinancialManagment.Controllers
         public async Task Register_CreateingUser_ReturnsOkResult()
         {
             _mediator = new Mock<IMediator>();
-            var token = new Mock<TokenService>();
             _mediator.Setup(p => p.Send(It.IsAny<AccountService.CreateUser>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
             var send = await _mediator.Object.Send(new AccountService.CreateUser());
 
-            _controller = new AuthController(_mediator.Object, token.Object);
+            _controller = new AuthController(_mediator.Object);
             var dto = new Mock<UserRegisterDto>();
             var result = await _controller.Register(dto.Object);
 

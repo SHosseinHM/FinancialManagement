@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Dto.Auth;
 using Application.Services.Interfaces.AccountService;
 using Infrastructure.Entities;
@@ -11,20 +7,33 @@ namespace Application.Mediator.Services.AccountService
 {
     public class AccountService
     {
+        #region Models
+        /// <summary>
+        /// Phone Number Exist
+        /// if Exist Return true
+        /// </summary>
         public class PhoneNumberExist : IRequest<bool>
         {
             public string PhoneNumber { get; set; }
         }
+        /// <summary>
+        /// bind to CreateUser Service
+        /// if Created, return True
+        /// </summary>
         public class CreateUser : IRequest<bool>
         {
             public UserRegisterDto userRegisterDto { get; set; }
         }
-
+        /// <summary>
+        /// Check PhoneNumber and Password 
+        /// if Matched , return Just Username and PhoneNumber in User object
+        /// </summary>
         public class UserCanLogin : IRequest<User>
         {
             public UserLoginDto userLoginDto { get; set; }
         }
 
+        #endregion
         public class HandlePhoneNumberExist : IRequestHandler<PhoneNumberExist, bool>
         {
             private readonly IAccountService _accountService;

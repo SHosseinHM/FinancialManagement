@@ -1,6 +1,5 @@
 using Application.Dto.Auth;
 using Application.Mediator.Services.AccountService;
-using Application.Security;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +10,17 @@ namespace FinancialManagment.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly TokenService _tokenService;
 
-        public AuthController(IMediator mediator, TokenService tokenService)
+        public AuthController(IMediator mediator)
         {
             _mediator = mediator;
-            _tokenService = tokenService;
         }
 
+        /// <summary>
+        /// Registration Users and Save Them to DataBase
+        /// </summary>
+        /// <param name="userRegisterDto"></param>
+        /// <returns>Ok result</returns>
         [HttpPost("Register")]
         public async Task<ActionResult> Register(UserRegisterDto userRegisterDto)
         {
@@ -49,13 +51,18 @@ namespace FinancialManagment.Controllers
                     return Ok(new { Title = "Completed Successfuly !, Now You Can Login" });
                 }
 
-                return BadRequest(new { Titel = "Can't Register Now, Please try later" });
+                return BadRequest(new { Title = "Can't Register Now, Please try later" });
                 #endregion
             }
-            return BadRequest(new { Titel = "Please fill all inputs" });
+            return BadRequest(new { Title = "Please fill all inputs" });
 
         }
-
+        /// <summary>
+        /// Login Users
+        /// </summary>
+        /// <param name="userLoginDto"></param>
+        /// <returns>an object {Username , PhoneNumber , JWT Token}</returns>
+        [HttpPost("Login")]
         public async Task<ActionResult> Login(UserLoginDto userLoginDto)
         {
             if (ModelState.IsValid)
@@ -64,7 +71,11 @@ namespace FinancialManagment.Controllers
                 #region LoginProcess
                 if (user != null)
                 {
-                    var token = _tokenService.GenerateToken(user);
+                    var generateToken = new Application.Mediator.Services.AccountService.TokenService.GenerateToken
+                    {
+                        user = user
+                    };
+                    var token = await _mediator.Send(generateToken);
                     var auth = new UserAuthDto
                     {
                         PhoneNumber = user.PhoneNumber,
@@ -74,9 +85,10 @@ namespace FinancialManagment.Controllers
                     return Ok(auth);
                 }
                 #endregion
-                return BadRequest(new { Title = "Please fill inputs" });
+                return BadRequest(new { Title = "PhoneNumber or Password is Incorrect" });
             }
             return BadRequest(new { Title = "Please fill inputs" });
         }
+
     }
 }
